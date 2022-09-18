@@ -42,7 +42,6 @@ class GitUploadHelper:
         for file_name in __file_list:
             os.system(f"git add '{file_name}'")
             _add_list.append(file_name)
-
         os.system(f'git commit -m "update\n{self.__string_builder_list(_add_list)}"')
         os.system("git push")
 
@@ -52,6 +51,7 @@ class GitUploadHelper:
         for index, _list in enumerate(bash_list):
             self.__upload_part(_list)
             print(f"batch {index+1} of {len(bash_list)} uploaded")
+        os.system("git add -A && git commit -m \"final\"")
 
     def __string_builder_list(self, _list):
         _string = ""
