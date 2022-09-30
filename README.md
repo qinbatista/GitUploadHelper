@@ -1,4 +1,4 @@
-# GitUploadHelper
+# GitUploadBigProject
 ## Why use it?
 If the size of your project is huge, you might not able to upload your git repository once, instead, you have to upload your project part by part. The GitUploadHelper will help you do the job automatically.
 
