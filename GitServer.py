@@ -94,9 +94,7 @@ def show_all_repositories():
         for index, repos_name in enumerate(repositories_list):
             if repos_name.rfind(".git") == -1:
                 continue
-            print(f'	[{repos_name}]\t')
-            print(f'	git clone ssh://{name}@{my_domain_name}:{my_port}/GitRepositories/{name}/{repos_name}')
-            print(f'	\t')
+            print(f'git clone ssh://{name}@{my_domain_name}:{my_port}/GitRepositories/{name}/{repos_name}')
     print("------------------------")
 
 
@@ -109,9 +107,9 @@ def add_repositories():
             folder_list = f.readlines()
         for folder in folder_list:
             folder = str(folder.replace("\n",""))
-            print("folder="+folder)
             if os.path.exists("/home/" + name + "/.ssh/") == False:
                 os.system('mkdir /GitRepositories/' + name)
+            print(f'-----------------------------------------------------------------------------')
             os.system('git init --bare '+'/GitRepositories/'+name+'/'+folder+'.git')
             os.system('chown -R '+name+":"+name+' /GitRepositories/' + name)
             os.system('chown -R '+name+":"+name+' /GitRepositories/' + name+'/'+folder+".git")
