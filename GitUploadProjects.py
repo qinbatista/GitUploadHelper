@@ -1,4 +1,4 @@
-
+#
 import os
 import sys
 import time
@@ -8,11 +8,11 @@ import threading
 
 class GitUploadProjects:
     def __init__(self, __dir_path=os.path.dirname(os.path.realpath(__file__))):
-        # self.__dir_path = __dir_path
-        self.__dir_path = "/Users/qin/qinProject/Unity3DAsset"
+        self.__dir_path = __dir_path
+        # self.__dir_path = "/Users/qin/qinProject/Unity3DAsset"
         self.__folder_list = os.listdir(self.__dir_path)
         self.__repositories_list_name = "repositories.txt"
-        self.__git_url = "ssh://qin@cq.qinyupeng.com:10022/GitRepositories/qin/"
+        self.__git_url = "ssh://unityassets@cq.qinyupeng.com:10022/GitRepositories/unityassets"
         self._list_repositories()
 
     def _push(self):
@@ -44,6 +44,7 @@ class GitUploadProjects:
                 os.chdir(self.__dir_path+'/'+folder_name)
                 print(f"--------------------{folder_name}------------------------")
                 os.system(f"git init")
+                os.system(f"git remote remove remote")
                 os.system(f"git remote add remote {self.__git_url}/"+folder_name+".git")
                 print(f"")
                 os.chdir(self.__dir_path)
@@ -130,8 +131,8 @@ class GitUploadProjects:
 
 if __name__ == '__main__':
     gm = GitUploadProjects()
-    # gm._add_remote_repositories()
-    # gm._commit_repositories()
     gm._create_repositories_record_file()
-    # gm = gm._pull()
-    # gm._push()
+    gm._add_remote_repositories()
+    gm._commit_repositories()
+    gm._push_repositories()
+
