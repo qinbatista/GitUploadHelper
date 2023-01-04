@@ -2,7 +2,7 @@ import os
 import sys
 
 
-class GitUploadHelper:
+class GitUploadProjectsHelper:
     def __init__(self, __args):
         self.__ignore_folder_list = [".git", ".vscode"]
         self.__ignore_file_list = [".DS_Store"]
