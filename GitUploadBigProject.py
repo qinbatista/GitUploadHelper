@@ -76,5 +76,5 @@ class GitUploadProjectsHelper:
 
 
 if __name__ == "__main__":
-    git_upload_helper = GitUploadHelper(sys.argv)
+    git_upload_helper = GitUploadProjectsHelper(sys.argv)
     git_upload_helper._start()
