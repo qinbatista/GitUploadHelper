@@ -3,6 +3,7 @@ import sys
 from multiprocessing import Pool
 import subprocess
 
+
 class GitUploadProjects:
     def __init__(self, __args=sys.argv, __dir_path=os.path.dirname(os.path.realpath(__file__))):
         self.__dir_path = __dir_path
@@ -38,19 +39,22 @@ class GitUploadProjects:
 
     def _commit_push_repositories(self):
         folder_list = self.__get_all_folders()
-        with Pool() as p:
-            p.map(self._upload_thread, [folder_name for folder_name in folder_list])
+        for folder_name in folder_list:
+            self._upload_thread(folder_name)
+
+        # with Pool() as p:
+        #     p.map(self._upload_thread, [folder_name for folder_name in folder_list])
 
     def _upload_thread(self, folder_name):
         if os.path.isdir(self.__dir_path+'/'+folder_name):
             os.chdir(self.__dir_path+'/'+folder_name)
             print(f"--------------------{folder_name}------------------------")
             output = subprocess.getoutput("git status")
-            if("nothing to commit" in output):
+            if ("nothing to commit" in output):
                 print("nothing to commit")
                 print(f"")
                 return
-            print("start commit:folder_name")
+            print("start commit:"+folder_name)
             self.__start_upload(self.__dir_path+'/'+folder_name)
             print(f"")
             os.chdir(self.__dir_path)
@@ -146,16 +150,6 @@ class GitUploadProjects:
         else:
             self.__folder_name = os.path.dirname(__file__)
 
-    def __upload_part(self, __file_list):
-        os.chdir(self.__folder_name)
-        _add_list = []
-        for file_name in __file_list:
-            os.system(f"git add '{file_name}'")
-            _add_list.append(file_name)
-
-        os.system(f'git commit -m "update\n{self.__string_builder_list(_add_list)}"')
-        os.system("git push")
-
     def __string_builder_list(self, _list):
         _string = ""
         for _string_ in _list:
@@ -206,15 +200,18 @@ class GitUploadProjects:
 
     def __upload_part(self, folder_path, __file_list):
         os.chdir(folder_path)
-        os.system("pwd")
         _add_list = []
         for file_name in __file_list:
             os.system(f"git add -f '{file_name}'")
-            print("file_name="+file_name)
             _add_list.append(file_name)
+        output = ""
+        while(True):
+            os.system(f'git commit -m "update\n{self.__string_builder_list(_add_list)}"')
+            output = subprocess.getoutput("git push --set-upstream remote master")
+            print(output)
+            if "Everything up-to-date" in output:
+                break
 
-        os.system(f'git commit -m "update\n{self.__string_builder_list(_add_list)}"')
-        os.system("git push --set-upstream remote master")
 
     def __start_upload(self, folder_path):
         _files_ = self.__list_repositories(folder_path)
